@@ -14,6 +14,9 @@ export const siteConfig = {
   domain: "romerogreentree.com",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://romerogreentree.com",
   ogImage: "/images/real/hero-climber-pine.jpg",
+  emergency: "24/7 Emergency Tree Service",
+  logoDark: "/images/logo/romero-logo-dark.png",
+  logoLight: "/images/logo/romero-logo-light.png",
 } as const;
 
 export const navLinks = [
@@ -178,6 +181,7 @@ export type IconName =
   | "equipment"
   | "building"
   | "language"
+  | "emergency"
   | "phone"
   | "mail"
   | "check";
@@ -185,7 +189,7 @@ export type IconName =
 export const trustPoints = [
   {
     icon: "shield" as IconName,
-    title: "Licensed & Insured",
+    title: "Insured",
     description: "Work you and your property are protected on.",
   },
   {
@@ -194,9 +198,9 @@ export const trustPoints = [
     description: "No-obligation quotes before any work begins.",
   },
   {
-    icon: "equipment" as IconName,
-    title: "Professional Equipment",
-    description: "Climbing gear and tools built for the job.",
+    icon: "emergency" as IconName,
+    title: "24/7 Emergency Tree Service",
+    description: "Storm damage response around the clock.",
   },
   {
     icon: "building" as IconName,

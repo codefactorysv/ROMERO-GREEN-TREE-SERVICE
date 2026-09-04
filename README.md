@@ -5,6 +5,8 @@ _"Keeping Families Safe Through Professional Tree Services."_
 
 Phone: **832-272-4373** · Email: **greentreeromero@gmail.com** · Hablamos Español
 
+**Insured · Free estimates · 24/7 emergency tree service**
+
 ---
 
 ## Stack
@@ -115,7 +117,9 @@ src/
     rate-limit.ts        # in-memory per-IP limiter
 public/
   images/real/           # the client's real job photographs
-  favicon.svg
+  images/stock/          # licensed stock photos (services with no real photo)
+  images/logo/           # Romero logo lockup (transparent PNG, light + dark)
+  favicon.png
 ```
 
 ### Editing content
@@ -190,7 +194,8 @@ These were intentionally **not** invented and should be added when confirmed:
 
 - Business address and service area (city / counties served)
 - Years of experience, crew size, certifications, review counts
-- Business hours
+- Regular business hours (only the 24/7 emergency tree service is confirmed)
+- Licensing details — the site claims **insured only**, never "licensed"
 - Social media profiles
 
 ---

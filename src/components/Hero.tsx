@@ -17,7 +17,7 @@ export function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], shouldReduceMotion ? [0, 0] : [0, 140]);
   const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.55, 0.85]);
 
-  const quickTrust = trustPoints.slice(0, 3);
+  const quickTrust = trustPoints.filter((p) => p.icon !== "emergency").slice(0, 3);
 
   return (
     <section
@@ -43,14 +43,16 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-ink-900/70 via-transparent to-transparent" />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 pb-16 pt-40 sm:px-6 sm:pb-20 lg:px-8 lg:pb-24">
-        <motion.p
+        <motion.a
+          href={siteConfig.phoneHref}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-4 inline-flex items-center gap-2 rounded-full border border-lime-300/40 bg-lime-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-lime-300 backdrop-blur-sm"
+          className="mb-4 inline-flex items-center gap-2 rounded-full border border-lime-300/40 bg-lime-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-lime-300 backdrop-blur-sm transition-colors hover:bg-lime-400/20"
         >
-          Licensed &amp; Insured Tree Care
-        </motion.p>
+          <Icon name="emergency" className="size-3.5" />
+          {siteConfig.emergency}
+        </motion.a>
 
         <motion.h1
           initial={{ opacity: 0, y: 24 }}

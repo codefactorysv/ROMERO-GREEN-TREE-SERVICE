@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description:
-    "Romero Green Tree Service provides professional tree removal, trimming, pruning, stump grinding, and landscaping for residential and commercial properties. Licensed & insured. Free estimates. Hablamos Español.",
+    "Romero Green Tree Service provides professional tree removal, trimming, pruning, stump grinding, and landscaping for residential and commercial properties. Insured. Free estimates. 24/7 emergency tree service. Hablamos Español.",
   keywords: [
     "tree removal",
     "tree trimming",
@@ -39,8 +39,9 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     type: "website",
@@ -75,11 +76,12 @@ const structuredData = {
   "@type": "ProfessionalService",
   name: siteConfig.name,
   description:
-    "Professional tree removal, trimming, pruning, stump grinding, and landscaping services for residential and commercial properties.",
+    "Professional tree removal, trimming, pruning, stump grinding, and landscaping services for residential and commercial properties. Emergency tree service available 24/7.",
   telephone: siteConfig.phone,
   email: siteConfig.email,
   url: siteConfig.url,
   image: `${siteConfig.url}${siteConfig.ogImage}`,
+  logo: `${siteConfig.url}${siteConfig.logoDark}`,
   priceRange: "$$",
   // Service area / address intentionally omitted — not confirmed by the
   // client. Add a `address` (PostalAddress) and `areaServed` once known.
@@ -90,6 +92,7 @@ const structuredData = {
     "Tree Pruning",
     "Stump Grinding",
     "Landscaping",
+    "24/7 Emergency Tree Service",
   ].map((name) => ({
     "@type": "Offer",
     itemOffered: { "@type": "Service", name },

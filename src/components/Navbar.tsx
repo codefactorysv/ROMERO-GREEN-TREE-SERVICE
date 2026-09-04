@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/lib/content";
@@ -36,13 +37,15 @@ export function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-6 lg:px-8">
-        <Link
-          href="#home"
-          className={`font-display text-lg font-semibold tracking-tight sm:text-xl ${
-            solid ? "text-forest-900" : "text-cream-50"
-          }`}
-        >
-          Romero <span className="text-lime-500">Green Tree</span>
+        <Link href="#home" aria-label={`${siteConfig.name} — home`}>
+          <Image
+            src={solid ? siteConfig.logoDark : siteConfig.logoLight}
+            alt={`${siteConfig.name} logo`}
+            width={999}
+            height={314}
+            priority
+            className="h-10 w-auto sm:h-12"
+          />
         </Link>
 
         <ul className="hidden items-center gap-8 lg:flex">

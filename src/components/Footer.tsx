@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { navLinks, photoCredits, services, siteConfig } from "@/lib/content";
 import { Icon } from "@/components/Icon";
 
@@ -10,14 +11,27 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="font-display text-xl font-semibold text-cream-50">
-              Romero <span className="text-lime-400">Green Tree</span>
-            </p>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed">{siteConfig.slogan}</p>
-            <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-lime-400/10 px-3 py-1 text-xs font-semibold text-lime-300 ring-1 ring-lime-400/20">
-              <Icon name="language" className="size-3.5" />
-              Hablamos Español
-            </p>
+            <Image
+              src={siteConfig.logoLight}
+              alt={`${siteConfig.name} logo`}
+              width={999}
+              height={314}
+              className="h-14 w-auto"
+            />
+            <p className="mt-4 max-w-xs text-sm leading-relaxed">{siteConfig.slogan}</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a
+                href={siteConfig.phoneHref}
+                className="inline-flex items-center gap-2 rounded-full bg-lime-400/10 px-3 py-1 text-xs font-semibold text-lime-300 ring-1 ring-lime-400/20 transition-colors hover:bg-lime-400/20"
+              >
+                <Icon name="emergency" className="size-3.5" />
+                {siteConfig.emergency}
+              </a>
+              <p className="inline-flex items-center gap-2 rounded-full bg-lime-400/10 px-3 py-1 text-xs font-semibold text-lime-300 ring-1 ring-lime-400/20">
+                <Icon name="language" className="size-3.5" />
+                Hablamos Español
+              </p>
+            </div>
           </div>
 
           <div>
@@ -81,7 +95,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
-          <p>Licensed &amp; Insured · Residential &amp; Commercial · Free Estimates</p>
+          <p>Insured · Residential &amp; Commercial · Free Estimates · 24/7 Emergency Tree Service</p>
         </div>
 
         <p className="mt-4 text-[11px] leading-relaxed text-cream-100/25">
