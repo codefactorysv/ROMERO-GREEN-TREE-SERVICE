@@ -130,7 +130,26 @@ updates everywhere on the page.
 
 `public/images/real/` holds the client's own job photos. They are used across the hero,
 services, story section, featured banner, about and gallery. **The "Our Work" gallery
-uses real photos exclusively** — no stock imagery is used anywhere on the site.
+uses the client's real photos exclusively** — no stock image ever appears there.
+
+`public/images/stock/` holds two licensed stock photos, used only for the two services
+the client has no photo of yet:
+
+| File                 | Used for       | Source                                                                                                 | License                                                                     |
+| -------------------- | -------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| `stump-grinding.jpg` | Stump Grinding | [Stump grinder](https://commons.wikimedia.org/wiki/File:Stump_grinder.jpg) by Wikideas1                  | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) — no attribution required |
+| `landscaping.jpg`    | Landscaping    | [Cottage garden border at Boreham, Essex, England](https://commons.wikimedia.org/wiki/File:Cottage_garden_border_at_Boreham,_Essex,_England.jpg) by Acabashi | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) — attribution required |
+
+Both are credited in the site footer, which is generated from the `photoCredits` array
+in `src/lib/content.ts`.
+
+### Replacing a stock photo with a real one
+
+1. Drop the new photo in `public/images/real/`.
+2. In `src/lib/content.ts`, point that service's `image` at the new file, update
+   `imageAlt`, and delete its `isStock: true` line.
+3. Delete the matching entry from `photoCredits` (the footer credit disappears with it)
+   and remove the unused file from `public/images/stock/`.
 
 ---
 

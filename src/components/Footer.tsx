@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { navLinks, services, siteConfig } from "@/lib/content";
+import { navLinks, photoCredits, services, siteConfig } from "@/lib/content";
 import { Icon } from "@/components/Icon";
 
 const bigServices = services.filter((s) => s.size === "lg");
@@ -83,6 +83,34 @@ export function Footer() {
           </p>
           <p>Licensed &amp; Insured · Residential &amp; Commercial · Free Estimates</p>
         </div>
+
+        <p className="mt-4 text-[11px] leading-relaxed text-cream-100/25">
+          Photo credits —{" "}
+          {photoCredits.map((credit, i) => (
+            <span key={credit.subject}>
+              {i > 0 && " · "}
+              {credit.subject}:{" "}
+              <a
+                href={credit.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-cream-100/50"
+              >
+                {credit.title}
+              </a>{" "}
+              by {credit.author},{" "}
+              <a
+                href={credit.licenseUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-cream-100/50"
+              >
+                {credit.license}
+              </a>
+            </span>
+          ))}
+          . All other photography © {siteConfig.name}.
+        </p>
       </div>
     </footer>
   );

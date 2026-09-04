@@ -34,7 +34,35 @@ export type ServiceItem = {
   imageAlt?: string;
   /** Tailwind object-position utility so portrait photos crop on the subject. */
   imagePosition?: string;
+  /** True for licensed stock photos (never used in the Our Work gallery). */
+  isStock?: boolean;
 };
+
+/**
+ * Licensed stock photos used only where the client has no photo of their own
+ * (stump grinding and landscaping). Every other image on the site is the
+ * client's real work. Credits are rendered in the footer as the licenses
+ * require — remove an entry here as soon as a real photo replaces it.
+ */
+export const photoCredits = [
+  {
+    subject: "Stump grinding",
+    title: "Stump grinder",
+    author: "Wikideas1",
+    license: "CC0 1.0",
+    licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Stump_grinder.jpg",
+  },
+  {
+    subject: "Landscaping",
+    title: "Cottage garden border at Boreham, Essex, England",
+    author: "Acabashi",
+    license: "CC BY-SA 4.0",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Cottage_garden_border_at_Boreham,_Essex,_England.jpg",
+  },
+] as const;
 
 // "lg" services get a full visual treatment (photo or icon-forward hero
 // card). "sm" services are the supporting/complementary list.
@@ -69,6 +97,9 @@ export const services: ServiceItem[] = [
       "Routine trimming to manage growth, clear structures and rooflines, and keep trees safe around your property year-round.",
     icon: "leaf",
     size: "lg",
+    image: "/images/real/gallery-removal-rv.jpg",
+    imageAlt: "Climber trimming a large tree in a tight space beside a carport",
+    imagePosition: "object-[50%_26%]",
   },
   {
     slug: "stump-grinding",
@@ -77,6 +108,10 @@ export const services: ServiceItem[] = [
       "Clean, professional stump removal so your yard is left level, safe, and ready for grass, mulch, or new landscaping.",
     icon: "grind",
     size: "lg",
+    image: "/images/stock/stump-grinding.jpg",
+    imageAlt: "Stump grinder at work on a residential lawn behind safety fencing",
+    imagePosition: "object-[42%_42%]",
+    isStock: true,
   },
   {
     slug: "landscaping",
@@ -85,6 +120,10 @@ export const services: ServiceItem[] = [
       "Full-property landscaping that complements your tree work, from bed design to seasonal cleanups.",
     icon: "landscape",
     size: "lg",
+    image: "/images/stock/landscaping.jpg",
+    imageAlt: "Landscaped garden border with shrubs and flowers along a mown lawn",
+    imagePosition: "object-[50%_72%]",
+    isStock: true,
   },
   {
     slug: "limb-cleaning",
