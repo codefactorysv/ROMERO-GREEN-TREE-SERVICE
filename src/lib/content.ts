@@ -32,6 +32,8 @@ export type ServiceItem = {
   size: "lg" | "sm";
   image?: string;
   imageAlt?: string;
+  /** Tailwind object-position utility so portrait photos crop on the subject. */
+  imagePosition?: string;
 };
 
 // "lg" services get a full visual treatment (photo or icon-forward hero
@@ -44,9 +46,10 @@ export const services: ServiceItem[] = [
       "Safe, controlled removal of hazardous, dead, or unwanted trees — even in tight residential spaces near homes, fences, and power lines.",
     icon: "axe",
     size: "lg",
-    image: "/images/real/why-two-pines-topping.jpg",
+    image: "/images/real/gallery-removal-trunk-park.jpg",
     imageAlt:
-      "Romero Green Tree Service climber sectioning two tall pine trees near a residential yard",
+      "Large tree sectioned down to the trunk with logs bucked and stacked on the lawn",
+    imagePosition: "object-[50%_62%]",
   },
   {
     slug: "tree-pruning",
@@ -57,6 +60,7 @@ export const services: ServiceItem[] = [
     size: "lg",
     image: "/images/real/hero-climber-pine.jpg",
     imageAlt: "Climber pruning limbs high in a pine tree canopy",
+    imagePosition: "object-[55%_55%]",
   },
   {
     slug: "tree-trimming",

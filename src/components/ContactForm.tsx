@@ -129,7 +129,11 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="flex flex-col items-center rounded-3xl border border-lime-300/40 bg-forest-900 p-10 text-center">
+      <div
+        role="status"
+        aria-live="polite"
+        className="flex flex-col items-center rounded-3xl border border-lime-300/40 bg-forest-900 p-10 text-center"
+      >
         <span className="flex size-14 items-center justify-center rounded-full bg-lime-400/15 text-lime-300">
           <CheckCircle2 className="size-7" />
         </span>
@@ -170,40 +174,50 @@ export function ContactForm() {
       </div>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Field label="Full Name" required error={errors.name}>
+        <Field label="Full Name" htmlFor="name" required error={errors.name}>
           <input
+            id="name"
             className={inputClass(errors.name)}
             name="name"
             autoComplete="name"
+            aria-invalid={Boolean(errors.name)}
+            aria-describedby={errors.name ? "name-error" : undefined}
             value={values.name}
             onChange={(e) => updateField("name", e.target.value)}
           />
         </Field>
 
-        <Field label="Phone Number" required error={errors.phone}>
+        <Field label="Phone Number" htmlFor="phone" required error={errors.phone}>
           <input
+            id="phone"
             className={inputClass(errors.phone)}
             name="phone"
             type="tel"
             autoComplete="tel"
+            aria-invalid={Boolean(errors.phone)}
+            aria-describedby={errors.phone ? "phone-error" : undefined}
             value={values.phone}
             onChange={(e) => updateField("phone", e.target.value)}
           />
         </Field>
 
-        <Field label="Email" error={errors.email}>
+        <Field label="Email" htmlFor="email" error={errors.email}>
           <input
+            id="email"
             className={inputClass(errors.email)}
             name="email"
             type="email"
             autoComplete="email"
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "email-error" : undefined}
             value={values.email}
             onChange={(e) => updateField("email", e.target.value)}
           />
         </Field>
 
-        <Field label="Service Address / ZIP Code" error={errors.address}>
+        <Field label="Service Address / ZIP Code" htmlFor="address" error={errors.address}>
           <input
+            id="address"
             className={inputClass(errors.address)}
             name="address"
             autoComplete="postal-code"
@@ -212,10 +226,13 @@ export function ContactForm() {
           />
         </Field>
 
-        <Field label="Service Needed" required error={errors.service}>
+        <Field label="Service Needed" htmlFor="service" required error={errors.service}>
           <select
+            id="service"
             className={inputClass(errors.service)}
             name="service"
+            aria-invalid={Boolean(errors.service)}
+            aria-describedby={errors.service ? "service-error" : undefined}
             value={values.service}
             onChange={(e) => updateField("service", e.target.value)}
           >
@@ -231,7 +248,7 @@ export function ContactForm() {
         </Field>
 
         <Field label="Property Type" error={errors.propertyType}>
-          <div className="flex gap-3 pt-1">
+          <div className="flex gap-3 pt-1" role="radiogroup" aria-label="Property Type">
             {propertyTypeOptions.map((option) => (
               <label
                 key={option}
@@ -256,8 +273,14 @@ export function ContactForm() {
         </Field>
       </div>
 
-      <Field label="Message / Tell us what you need" error={errors.message} className="mt-5">
+      <Field
+        label="Message / Tell us what you need"
+        htmlFor="message"
+        error={errors.message}
+        className="mt-5"
+      >
         <textarea
+          id="message"
           className={inputClass(errors.message)}
           name="message"
           rows={4}
@@ -316,7 +339,10 @@ export function ContactForm() {
       </label>
 
       {status === "error" && serverMessage && (
-        <div className="mt-6 flex items-start gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <div
+          role="alert"
+          className="mt-6 flex items-start gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-300"
+        >
           <AlertTriangle className="mt-0.5 size-4 shrink-0" />
           {serverMessage}
         </div>
@@ -345,24 +371,41 @@ function inputClass(error?: string) {
 
 function Field({
   label,
+  htmlFor,
   required,
   error,
   className,
   children,
 }: {
   label: string;
+  /** Omit for grouped controls (radios) that are labelled with aria-label. */
+  htmlFor?: string;
   required?: boolean;
   error?: string;
   className?: string;
   children: React.ReactNode;
 }) {
+  const labelContent = (
+    <>
+      {label} {required && <span className="text-lime-400">*</span>}
+    </>
+  );
+
   return (
     <div className={className}>
-      <label className="mb-2 block text-sm font-semibold text-cream-100">
-        {label} {required && <span className="text-lime-400">*</span>}
-      </label>
+      {htmlFor ? (
+        <label htmlFor={htmlFor} className="mb-2 block text-sm font-semibold text-cream-100">
+          {labelContent}
+        </label>
+      ) : (
+        <span className="mb-2 block text-sm font-semibold text-cream-100">{labelContent}</span>
+      )}
       {children}
-      {error && <p className="mt-1.5 text-sm text-red-400">{error}</p>}
+      {error && (
+        <p id={htmlFor ? `${htmlFor}-error` : undefined} className="mt-1.5 text-sm text-red-400">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

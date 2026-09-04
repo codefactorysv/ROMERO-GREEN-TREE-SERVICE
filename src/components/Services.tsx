@@ -33,8 +33,8 @@ export function Services() {
               className={service.slug === "tree-removal" ? "lg:col-span-2" : undefined}
             >
               <article
-                className={`group relative isolate flex h-full min-h-72 flex-col justify-end overflow-hidden rounded-3xl ${
-                  service.image ? "" : "bg-forest-900"
+                className={`group relative isolate flex h-full flex-col justify-end overflow-hidden rounded-3xl ${
+                  service.image ? "min-h-[24rem]" : "min-h-64 bg-forest-900"
                 }`}
               >
                 {service.image ? (
@@ -45,9 +45,11 @@ export function Services() {
                       fill
                       loading="lazy"
                       sizes="(min-width: 1024px) 50vw, 100vw"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      className={`object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${
+                        service.imagePosition ?? ""
+                      }`}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink-900/90 via-ink-900/25 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink-900/95 via-ink-900/70 to-ink-900/30" />
                   </>
                 ) : (
                   <div

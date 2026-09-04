@@ -17,8 +17,8 @@ export function About() {
           <Reveal>
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl sm:aspect-[4/3] lg:aspect-[4/5]">
               <Image
-                src="/images/real/gallery-removal-trunk-park.jpg"
-                alt="Romero Green Tree Service completed tree work in a residential yard"
+                src="/images/real/why-two-pines-topping.jpg"
+                alt="Romero Green Tree Service crew removing two tall pine trees beside a home"
                 fill
                 loading="lazy"
                 sizes="(min-width: 1024px) 50vw, 100vw"
