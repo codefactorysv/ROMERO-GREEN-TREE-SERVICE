@@ -32,7 +32,6 @@ export const contactSchema = z.object({
   }),
   propertyType: z.enum(propertyTypeOptions).optional(),
   message: z.string().trim().max(2000).optional().or(z.literal("")),
-  spanishPreferred: z.boolean().optional(),
   // Honeypot — must always arrive empty from a real visitor.
   company: z.string().max(0).optional().or(z.literal("")),
 });

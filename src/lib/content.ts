@@ -1,19 +1,26 @@
-// Central content/data source for the Romero Green Tree Service landing page.
+// Central content/data source for the ROOSTER Tree - Lawn Services landing page.
 // Keeping copy and structured data here makes it easy to edit from a phone
 // (one file, no hunting through JSX) and keeps components presentation-only.
 
 export const siteConfig = {
-  name: "Romero Green Tree Service",
-  shortName: "Romero Green Tree",
-  slogan: "Keeping Families Safe Through Professional Tree Services.",
-  phone: "832-272-4373",
-  phoneHref: "tel:+18322724373",
-  phoneDisplay: "(832) 272-4373",
-  email: "greentreeromero@gmail.com",
-  emailHref: "mailto:greentreeromero@gmail.com",
-  domain: "romerogreentree.com",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://romerogreentree.com",
+  /** Full legal-ish name used in metadata and structured data. */
+  name: "ROOSTER Tree & Lawn Services",
+  /** Wordmark shown in the UI. */
+  brand: "ROOSTER",
+  descriptor: "Tree - Lawn Services",
+  slogan: "Reliable Property Care When You Need It.",
+  phone: "832-989-8795",
+  phoneHref: "tel:+18329898795",
+  phoneDisplay: "(832) 989-8795",
+  hours: "7:00 AM – 7:00 PM",
+  emergency: "24/7 Emergency Tree Service",
+  // NOTE: no public email yet — the client has not confirmed one. Form
+  // submissions are routed through the CONTACT_EMAIL environment variable.
+  // Replace this placeholder domain once the real one is live.
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://example.com",
   ogImage: "/images/real/hero-climber-pine.jpg",
+  logoDark: "/images/logo/rooster-logo-dark.png",
+  logoLight: "/images/logo/rooster-logo-light.png",
 } as const;
 
 export const navLinks = [
@@ -32,17 +39,16 @@ export type ServiceItem = {
   size: "lg" | "sm";
   image?: string;
   imageAlt?: string;
-  /** Tailwind object-position utility so portrait photos crop on the subject. */
+  /** Tailwind object-position utility so photos crop on the subject. */
   imagePosition?: string;
   /** True for licensed stock photos (never used in the Our Work gallery). */
   isStock?: boolean;
 };
 
 /**
- * Licensed stock photos used only where the client has no photo of their own
- * (stump grinding and landscaping). Every other image on the site is the
- * client's real work. Credits are rendered in the footer as the licenses
- * require — remove an entry here as soon as a real photo replaces it.
+ * Licensed stock photos, used only for services the client has no photo of
+ * yet. Every other image on the site is the client's real work. Credits are
+ * rendered in the footer — remove an entry as soon as a real photo replaces it.
  */
 export const photoCredits = [
   {
@@ -54,110 +60,103 @@ export const photoCredits = [
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Stump_grinder.jpg",
   },
   {
-    subject: "Landscaping",
-    title: "Cottage garden border at Boreham, Essex, England",
-    author: "Acabashi",
-    license: "CC BY-SA 4.0",
-    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+    subject: "Lawn services",
+    title: "Mowing lawn",
+    author: "rawpixel",
+    license: "CC0 1.0",
+    licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
     sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Cottage_garden_border_at_Boreham,_Essex,_England.jpg",
+      "https://www.rawpixel.com/image/5920140/mowing-the-lawn-free-public-domain-cc0-photo",
   },
 ] as const;
 
-// "lg" services get a full visual treatment (photo or icon-forward hero
-// card). "sm" services are the supporting/complementary list.
+// "lg" services are the five the client highlights. "sm" services are the
+// additional work listed on their business card.
 export const services: ServiceItem[] = [
   {
-    slug: "tree-removal",
-    title: "Tree Removal",
+    slug: "tree-services",
+    title: "Tree Services",
     description:
-      "Safe, controlled removal of hazardous, dead, or unwanted trees — even in tight residential spaces near homes, fences, and power lines.",
+      "Professional tree work for residential and commercial properties, handled safely from the first cut to the final cleanup.",
     icon: "axe",
     size: "lg",
     image: "/images/real/gallery-removal-trunk-park.jpg",
-    imageAlt:
-      "Large tree sectioned down to the trunk with logs bucked and stacked on the lawn",
+    imageAlt: "Large tree sectioned down to the trunk with logs stacked on the lawn",
     imagePosition: "object-[50%_62%]",
-  },
-  {
-    slug: "tree-pruning",
-    title: "Tree Pruning",
-    description:
-      "Climbing-based pruning that improves tree health and structure while keeping your canopy looking clean and well cared for.",
-    icon: "shears",
-    size: "lg",
-    image: "/images/real/hero-climber-pine.jpg",
-    imageAlt: "Climber pruning limbs high in a pine tree canopy",
-    imagePosition: "object-[55%_55%]",
-  },
-  {
-    slug: "tree-trimming",
-    title: "Tree Trimming",
-    description:
-      "Routine trimming to manage growth, clear structures and rooflines, and keep trees safe around your property year-round.",
-    icon: "leaf",
-    size: "lg",
-    image: "/images/real/gallery-removal-rv.jpg",
-    imageAlt: "Climber trimming a large tree in a tight space beside a carport",
-    imagePosition: "object-[50%_26%]",
   },
   {
     slug: "stump-grinding",
     title: "Stump Grinding",
     description:
-      "Clean, professional stump removal so your yard is left level, safe, and ready for grass, mulch, or new landscaping.",
+      "Remove unwanted stumps and reclaim usable outdoor space, leaving the ground level and ready for whatever comes next.",
     icon: "grind",
     size: "lg",
     image: "/images/stock/stump-grinding.jpg",
-    imageAlt: "Stump grinder at work on a residential lawn behind safety fencing",
+    imageAlt: "Stump grinder at work on a lawn behind safety fencing",
     imagePosition: "object-[42%_42%]",
     isStock: true,
   },
   {
-    slug: "landscaping",
-    title: "Landscaping",
+    slug: "lawn-services",
+    title: "Lawn Services",
     description:
-      "Full-property landscaping that complements your tree work, from bed design to seasonal cleanups.",
-    icon: "landscape",
+      "Routine lawn care to keep outdoor spaces clean, healthy, and well maintained all season long.",
+    icon: "shears",
     size: "lg",
-    image: "/images/stock/landscaping.jpg",
-    imageAlt: "Landscaped garden border with shrubs and flowers along a mown lawn",
-    imagePosition: "object-[50%_72%]",
+    image: "/images/stock/lawn-services.jpg",
+    imageAlt: "Lawn mower cutting fresh green grass in a well-kept yard",
+    imagePosition: "object-[50%_55%]",
     isStock: true,
-  },
-  {
-    slug: "limb-cleaning",
-    title: "Limb Cleaning",
-    description: "Deadwood and loose limb removal to reduce storm risk.",
-    icon: "branch",
-    size: "sm",
   },
   {
     slug: "mulching",
     title: "Mulching",
-    description: "Fresh mulch beds that protect roots and look sharp.",
+    description:
+      "Fresh mulch installation for cleaner, healthier landscape areas that hold moisture and look sharp.",
     icon: "mulch",
-    size: "sm",
+    size: "lg",
+  },
+  {
+    slug: "sod-installation",
+    title: "Sod Installation",
+    description:
+      "Transform bare or worn-out areas with professionally installed fresh sod.",
+    icon: "grass",
+    size: "lg",
   },
   {
     slug: "flower-beds",
     title: "Flower Beds",
-    description: "Clean, defined flower beds built and maintained.",
+    description: "Clean, defined beds built and maintained.",
     icon: "flower",
     size: "sm",
   },
   {
-    slug: "plant-grass",
-    title: "Plant Grass",
-    description: "Grass installation to fill in and restore your lawn.",
-    icon: "grass",
+    slug: "wood-fence",
+    title: "Wood Fence",
+    description: "Wood fencing for privacy and property lines.",
+    icon: "fence",
     size: "sm",
   },
   {
-    slug: "and-more",
-    title: "And More",
-    description: "Ask us — if it involves trees or your yard, we can help.",
-    icon: "more",
+    slug: "power-washing",
+    title: "Power Washing",
+    description: "Surfaces washed back to looking new.",
+    icon: "wash",
+    size: "sm",
+  },
+  {
+    slug: "junk-hauling",
+    title: "Junk Hauling",
+    description: "Debris and unwanted items hauled away.",
+    icon: "haul",
+    size: "sm",
+  },
+  {
+    slug: "property-maintenance",
+    title: "Property Maintenance",
+    description: "Ongoing upkeep for homes and businesses.",
+    icon: "maintenance",
     size: "sm",
   },
 ];
@@ -165,38 +164,27 @@ export const services: ServiceItem[] = [
 export type IconName =
   | "axe"
   | "shears"
-  | "leaf"
   | "grind"
-  | "landscape"
-  | "branch"
   | "mulch"
-  | "flower"
   | "grass"
-  | "more"
-  | "shield"
+  | "flower"
+  | "fence"
+  | "wash"
+  | "haul"
+  | "maintenance"
   | "estimate"
-  | "equipment"
   | "building"
-  | "language"
+  | "clock"
+  | "emergency"
+  | "leaf"
   | "phone"
-  | "mail"
   | "check";
 
 export const trustPoints = [
   {
-    icon: "shield" as IconName,
-    title: "Licensed & Insured",
-    description: "Work you and your property are protected on.",
-  },
-  {
     icon: "estimate" as IconName,
     title: "Free Estimates",
     description: "No-obligation quotes before any work begins.",
-  },
-  {
-    icon: "equipment" as IconName,
-    title: "Professional Equipment",
-    description: "Climbing gear and tools built for the job.",
   },
   {
     icon: "building" as IconName,
@@ -204,16 +192,23 @@ export const trustPoints = [
     description: "Homes, businesses, and everything in between.",
   },
   {
-    icon: "language" as IconName,
-    title: "English & Español",
-    description: "Hablamos Español — always happy to help.",
+    icon: "clock" as IconName,
+    title: "Open 7 AM – 7 PM",
+    description: "Regular service hours, seven days a week.",
+  },
+  {
+    icon: "emergency" as IconName,
+    title: "24/7 Tree Emergencies",
+    description: "Storm damage response around the clock.",
+  },
+  {
+    icon: "leaf" as IconName,
+    title: "Tree & Lawn Care",
+    description: "One crew for the whole property.",
   },
 ];
 
-export type GalleryCategory =
-  | "Tree Removal"
-  | "Tree Trimming & Pruning"
-  | "Special Projects";
+export type GalleryCategory = "Tree Removal" | "Tree Work" | "Special Projects";
 
 export type GalleryItem = {
   id: string;
@@ -262,11 +257,11 @@ export const galleryItems: GalleryItem[] = [
     caption: "Climbing the trunk to set the next cut",
   },
   {
-    id: "pruning-pine",
+    id: "canopy-work",
     src: "/images/real/hero-climber-pine.jpg",
-    alt: "Climber pruning limbs inside a pine tree canopy",
-    category: "Tree Trimming & Pruning",
-    caption: "In-canopy pruning for tree health and structure",
+    alt: "Climber working on limbs inside a pine tree canopy",
+    category: "Tree Work",
+    caption: "In-canopy work high off the ground",
   },
   {
     id: "special-water",
@@ -300,27 +295,32 @@ export const storyItems: StoryItem[] = [
     imageAlt: "Climber ascending a large tree trunk with full safety gear",
   },
   {
-    title: "Ready for Difficult Conditions",
+    title: "Ready When Storms Hit",
     description:
-      "Storm damage, flooded yards, awkward angles — our crew handles the jobs that require real experience, not shortcuts.",
+      "Storm damage, flooded yards, awkward angles — our crew handles the jobs that require real experience, and tree emergencies are answered 24/7.",
     image: "/images/real/why-water-removal.jpg",
     imageAlt: "Crew removing a storm-fallen tree over water",
   },
   {
-    title: "Specialized When It Counts",
+    title: "Care for the Whole Property",
     description:
-      "From routine pruning to a live hive high in the canopy, we come prepared for what your property actually needs.",
+      "From the canopy down to the lawn, we handle tree work, stump grinding, lawn care, mulching, and sod so your property is looked after end to end.",
     image: "/images/real/why-bee-removal.jpg",
-    imageAlt: "Worker in protective beekeeping gear removing a hive from a tree",
+    imageAlt: "Worker in protective gear removing a hive from a tree",
   },
 ];
 
 export const serviceOptions = [
-  "Tree Removal",
-  "Tree Trimming",
-  "Tree Pruning",
+  "Tree Services",
   "Stump Grinding",
-  "Landscaping",
+  "Lawn Services",
+  "Mulching",
+  "Sod Installation",
+  "Flower Beds",
+  "Wood Fence",
+  "Power Washing",
+  "Junk Hauling",
+  "Property Maintenance",
   "Other",
 ] as const;
 

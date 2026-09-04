@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { TrustBar } from "@/components/TrustBar";
 import { Services } from "@/components/Services";
+import { EmergencyBanner } from "@/components/EmergencyBanner";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { Gallery } from "@/components/Gallery";
 import { FeaturedBanner } from "@/components/FeaturedBanner";
@@ -18,6 +19,7 @@ export default function Home() {
         <Hero />
         <TrustBar />
         <Services />
+        <EmergencyBanner />
         <WhyChooseUs />
         <Gallery />
         <FeaturedBanner />

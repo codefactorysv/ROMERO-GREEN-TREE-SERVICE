@@ -17,38 +17,42 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
+const description =
+  "Professional tree and lawn services including tree work, stump grinding, lawn care, mulching and sod installation. Call ROOSTER today for a free estimate.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | Professional Tree Services`,
-    template: `%s | ${siteConfig.name}`,
+    default: "ROOSTER | Professional Tree & Lawn Services",
+    template: `%s | ${siteConfig.brand}`,
   },
-  description:
-    "Romero Green Tree Service provides professional tree removal, trimming, pruning, stump grinding, and landscaping for residential and commercial properties. Licensed & insured. Free estimates. Hablamos Español.",
+  description,
   keywords: [
-    "tree removal",
-    "tree trimming",
-    "tree pruning",
+    "tree services",
     "stump grinding",
+    "lawn services",
+    "lawn care",
+    "mulching",
+    "sod installation",
+    "emergency tree service",
     "residential tree service",
     "commercial tree service",
-    "landscaping",
-    "arborist",
     "tree service near me",
   ],
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: `${siteConfig.name} | Professional Tree Services`,
-    description: siteConfig.slogan,
+    title: "ROOSTER | Professional Tree & Lawn Services",
+    description,
     images: [
       {
         url: siteConfig.ogImage,
@@ -60,8 +64,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} | Professional Tree Services`,
-    description: siteConfig.slogan,
+    title: "ROOSTER | Professional Tree & Lawn Services",
+    description,
     images: [siteConfig.ogImage],
   },
   robots: {
@@ -74,22 +78,44 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   name: siteConfig.name,
+  alternateName: siteConfig.brand,
   description:
-    "Professional tree removal, trimming, pruning, stump grinding, and landscaping services for residential and commercial properties.",
-  telephone: siteConfig.phone,
-  email: siteConfig.email,
+    "Professional tree services, stump grinding, lawn services, mulching, and sod installation for residential and commercial properties. Emergency tree service available 24/7.",
+  telephone: "+18329898795",
   url: siteConfig.url,
   image: `${siteConfig.url}${siteConfig.ogImage}`,
+  logo: `${siteConfig.url}${siteConfig.logoDark}`,
   priceRange: "$$",
-  // Service area / address intentionally omitted — not confirmed by the
-  // client. Add a `address` (PostalAddress) and `areaServed` once known.
-  knowsLanguage: ["en", "es"],
+  // Address, service area, email, ratings and founding date are intentionally
+  // omitted — not confirmed by the client. Add them once known.
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+      opens: "07:00",
+      closes: "19:00",
+    },
+  ],
   makesOffer: [
-    "Tree Removal",
-    "Tree Trimming",
-    "Tree Pruning",
+    "Tree Services",
     "Stump Grinding",
-    "Landscaping",
+    "Lawn Services",
+    "Mulching",
+    "Sod Installation",
+    "Flower Beds",
+    "Wood Fence",
+    "Power Washing",
+    "Junk Hauling",
+    "Property Maintenance",
+    "24/7 Emergency Tree Service",
   ].map((name) => ({
     "@type": "Offer",
     itemOffered: { "@type": "Service", name },

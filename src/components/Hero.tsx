@@ -28,7 +28,7 @@ export function Hero() {
       <motion.div style={{ y }} className="absolute inset-0">
         <Image
           src="/images/real/hero-climber-pine.jpg"
-          alt="Romero Green Tree Service climber working high in a pine tree canopy"
+          alt="ROOSTER Tree - Lawn Services climber working high in a pine tree canopy"
           fill
           priority
           fetchPriority="high"
@@ -49,7 +49,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mb-4 inline-flex items-center gap-2 rounded-full border border-lime-300/40 bg-lime-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-lime-300 backdrop-blur-sm"
         >
-          Licensed &amp; Insured Tree Care
+          Tree &amp; Lawn Services
         </motion.p>
 
         <motion.h1
@@ -58,7 +58,7 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="text-balance font-display text-4xl font-semibold leading-[1.05] text-cream-50 sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Professional Tree Services You Can Trust
+          Professional Tree &amp; Lawn Services
         </motion.h1>
 
         <motion.p
@@ -67,8 +67,8 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.32 }}
           className="mt-5 max-w-xl text-balance text-lg text-cream-100/85 sm:text-xl"
         >
-          Safe, reliable tree care for your property — removal, trimming, pruning &amp;
-          landscaping, done right the first time.
+          Reliable property care when you need it — tree services, stump grinding,
+          lawn care, mulching, sod installation &amp; more.
         </motion.p>
 
         <motion.div
@@ -104,10 +104,13 @@ export function Hero() {
               {point.title}
             </div>
           ))}
-          <div className="flex items-center gap-2 rounded-full bg-lime-400/15 px-3 py-1 text-sm font-semibold text-lime-300 ring-1 ring-lime-300/30">
-            <Icon name="language" className="size-4" />
-            Hablamos Español
-          </div>
+          <a
+            href={siteConfig.phoneHref}
+            className="flex items-center gap-2 rounded-full bg-lime-400/15 px-3 py-1 text-sm font-semibold text-lime-300 ring-1 ring-lime-300/30 transition-colors hover:bg-lime-400/25"
+          >
+            <Icon name="emergency" className="size-4" />
+            Tree Emergencies Available 24/7
+          </a>
         </motion.div>
       </div>
     </section>

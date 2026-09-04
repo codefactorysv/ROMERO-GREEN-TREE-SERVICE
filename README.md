@@ -1,9 +1,12 @@
-# Romero Green Tree Service — Landing Page
+# ROOSTER Tree - Lawn Services — Landing Page
 
-Conversion-focused landing page for **Romero Green Tree Service**
-_"Keeping Families Safe Through Professional Tree Services."_
+Conversion-focused landing page for **ROOSTER Tree - Lawn Services**
+_"Reliable Property Care When You Need It."_
 
-Phone: **832-272-4373** · Email: **greentreeromero@gmail.com** · Hablamos Español
+Phone: **832-989-8795** · Regular hours: **7:00 AM – 7:00 PM** · **24/7 emergency tree service**
+
+Services: Tree Services · Stump Grinding · Lawn Services · Mulching · Sod Installation ·
+Flower Beds · Wood Fence · Power Washing · Junk Hauling · Property Maintenance
 
 ---
 
@@ -55,11 +58,11 @@ Copy `.env.example` to `.env.local` and fill it in. **Never commit `.env*` files
 | Variable               | Required | What it does                                                        |
 | ---------------------- | -------- | ------------------------------------------------------------------- |
 | `RESEND_API_KEY`       | Yes\*    | Resend API key used to send form submissions. Starts with `re_`.     |
-| `CONTACT_TO_EMAIL`     | No       | Inbox that receives requests. Defaults to `greentreeromero@gmail.com`. |
+| `CONTACT_EMAIL`        | Yes\*    | Inbox that receives requests. No email is published on the site — it lives only here. |
 | `CONTACT_FROM_EMAIL`   | No       | "From" address. Defaults to `onboarding@resend.dev` (testing only).  |
 | `NEXT_PUBLIC_SITE_URL` | No       | Public URL used for canonical/OG tags and `sitemap.xml`.             |
 
-\* Without `RESEND_API_KEY`:
+\* Without `RESEND_API_KEY` or `CONTACT_EMAIL`:
 
 - **In development**, submissions are logged to the terminal and the form shows the
   success state, so the whole flow can be tested without credentials.
@@ -71,10 +74,11 @@ Copy `.env.example` to `.env.local` and fill it in. **Never commit `.env*` files
 1. Create an account at <https://resend.com> and add an API key
    (Dashboard → API Keys → Create).
 2. Paste it into `.env.local` as `RESEND_API_KEY=re_...`.
-3. For a real "From" address, verify the domain `romerogreentree.com` in Resend
-   (Dashboard → Domains) and set `CONTACT_FROM_EMAIL=estimates@romerogreentree.com`.
+3. Set `CONTACT_EMAIL` to the inbox that should receive requests.
+4. For a real "From" address, verify the business domain in Resend
+   (Dashboard → Domains) and set `CONTACT_FROM_EMAIL=estimates@yourdomain.com`.
    Until then, `onboarding@resend.dev` works for testing.
-4. Redeploy (or restart `npm run dev`). Nothing in the code needs to change.
+5. Redeploy (or restart `npm run dev`). Nothing in the code needs to change.
 
 ---
 
@@ -83,7 +87,7 @@ Copy `.env.example` to `.env.local` and fill it in. **Never commit `.env*` files
 `src/components/ContactForm.tsx` → `POST /api/contact` → Resend → inbox.
 
 - Fields: name\*, phone\*, email, service address/ZIP, service needed\*, property type,
-  message, up to 4 optional photos, and a "I prefer service in Spanish" checkbox.
+  message, and up to 4 optional photos.
 - Validation runs on the client **and** again on the server with the same Zod schema
   (`src/lib/validation.ts`) — the server is the source of truth.
 - Protection: hidden honeypot field, per-IP rate limiting (5 requests / 10 minutes),
@@ -115,18 +119,25 @@ src/
     rate-limit.ts        # in-memory per-IP limiter
 public/
   images/real/           # the client's real job photographs
-  favicon.svg
+  images/stock/          # licensed CC0 photos for services with no real photo
+  images/logo/           # ROOSTER logo (transparent PNG, light + dark)
+  favicon.png
 ```
 
 ### Editing content
 
 Almost everything visitors read lives in **`src/lib/content.ts`** — phone number,
-email, services, gallery captions and categories, trust points. Change it there and it
+hours, services, gallery captions and categories, trust points. Change it there and it
 updates everywhere on the page.
 
 ---
 
 ## Photography
+
+`public/images/logo/` holds the ROOSTER logo, extracted from the supplied artwork with a
+transparent background in two versions: `rooster-logo-dark.png` (for light backgrounds)
+and `rooster-logo-light.png` (for dark backgrounds). `public/favicon.png` and
+`public/apple-touch-icon.png` are generated from the rooster mark.
 
 `public/images/real/` holds the client's own job photos. They are used across the hero,
 services, story section, featured banner, about and gallery. **The "Our Work" gallery
@@ -135,13 +146,14 @@ uses the client's real photos exclusively** — no stock image ever appears ther
 `public/images/stock/` holds two licensed stock photos, used only for the two services
 the client has no photo of yet:
 
-| File                 | Used for       | Source                                                                                                 | License                                                                     |
-| -------------------- | -------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| `stump-grinding.jpg` | Stump Grinding | [Stump grinder](https://commons.wikimedia.org/wiki/File:Stump_grinder.jpg) by Wikideas1                  | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) — no attribution required |
-| `landscaping.jpg`    | Landscaping    | [Cottage garden border at Boreham, Essex, England](https://commons.wikimedia.org/wiki/File:Cottage_garden_border_at_Boreham,_Essex,_England.jpg) by Acabashi | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) — attribution required |
+| File                 | Used for       | Source                                                                                  | License                                                      |
+| -------------------- | -------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `stump-grinding.jpg` | Stump Grinding | [Stump grinder](https://commons.wikimedia.org/wiki/File:Stump_grinder.jpg) by Wikideas1   | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| `lawn-services.jpg`  | Lawn Services  | [Mowing lawn](https://www.rawpixel.com/image/5920140/mowing-the-lawn-free-public-domain-cc0-photo) by rawpixel | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
 
-Both are credited in the site footer, which is generated from the `photoCredits` array
-in `src/lib/content.ts`.
+Both are CC0 (public domain), so attribution is not legally required — the footer
+credits them anyway for traceability, generated from the `photoCredits` array in
+`src/lib/content.ts`.
 
 ### Replacing a stock photo with a real one
 
@@ -188,9 +200,12 @@ built-in image optimization.
 
 These were intentionally **not** invented and should be added when confirmed:
 
+- Public email address (the form already works through `CONTACT_EMAIL`)
+- Real domain — `NEXT_PUBLIC_SITE_URL` is currently the placeholder `https://example.com`
 - Business address and service area (city / counties served)
-- Years of experience, crew size, certifications, review counts
-- Business hours
+- Years of experience, crew size, licensing/insurance details, certifications, reviews
+- Whether the crew offers service in Spanish (the old Spanish-preference checkbox was
+  removed because it came from the previous business's information)
 - Social media profiles
 
 ---
@@ -204,7 +219,8 @@ git commit -m "feat: describe the change"
 git push -u origin <branch-name> # push
 ```
 
-Working branch for this project: `claude/romero-green-tree-landing-vi5fkd`.
+Working branch for this project: `claude/romero-green-tree-landing-vi5fkd`
+(named before the rebrand — the repository and branch names stay as they are).
 
 Before every push, double-check no secrets are staged:
 
