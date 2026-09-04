@@ -17,11 +17,11 @@ export function Services() {
             What We Do
           </p>
           <h2 className="mt-3 text-balance font-display text-3xl font-semibold text-ink-900 sm:text-4xl lg:text-5xl">
-            Tree &amp; Lawn Care, Start to Finish
+            Complete Tree Care, Start to Finish
           </h2>
           <p className="mt-4 text-lg text-ink-700/80">
-            From the canopy down to the lawn — residential and commercial properties,
-            handled by one crew with the right equipment.
+            From a single hazardous limb to a full property clean-up — residential and
+            commercial, we handle it with the right crew and the right equipment.
           </p>
         </Reveal>
 
@@ -30,7 +30,7 @@ export function Services() {
             <Reveal
               key={service.slug}
               delay={i * 0.08}
-              className={service.slug === "tree-services" ? "lg:col-span-2" : undefined}
+              className={service.slug === "tree-removal" ? "lg:col-span-2" : undefined}
             >
               <article
                 className={`group relative isolate flex h-full flex-col justify-end overflow-hidden rounded-3xl ${
@@ -81,7 +81,7 @@ export function Services() {
 
         <Reveal className="mt-14" delay={0.1}>
           <h3 className="font-display text-xl font-semibold text-ink-900">
-            Also available
+            Also part of our full-service crew
           </h3>
         </Reveal>
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">

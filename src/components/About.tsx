@@ -3,10 +3,10 @@ import { Icon } from "@/components/Icon";
 import { Reveal } from "@/components/Reveal";
 
 const points = [
-  { icon: "leaf" as const, text: "Safety-first approach on every job, every climb" },
+  { icon: "shield" as const, text: "Safety-first approach on every job, every climb" },
   { icon: "building" as const, text: "Residential and commercial properties, big or small" },
   { icon: "estimate" as const, text: "Honest, free estimates before any work begins" },
-  { icon: "emergency" as const, text: "Tree emergencies answered 24/7" },
+  { icon: "language" as const, text: "Friendly service in English and Español" },
 ];
 
 export function About() {
@@ -18,7 +18,7 @@ export function About() {
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl sm:aspect-[4/3] lg:aspect-[4/5]">
               <Image
                 src="/images/real/why-two-pines-topping.jpg"
-                alt="ROOSTER Tree - Lawn Services crew removing two tall pine trees beside a home"
+                alt="Romero Green Tree Service crew removing two tall pine trees beside a home"
                 fill
                 loading="lazy"
                 sizes="(min-width: 1024px) 50vw, 100vw"
@@ -30,19 +30,18 @@ export function About() {
           <Reveal delay={0.1}>
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-forest-600">About Us</p>
             <h2 className="mt-3 text-balance font-display text-3xl font-semibold text-ink-900 sm:text-4xl lg:text-5xl">
-              ROOSTER Tree - Lawn Services
+              Romero Green Tree Service
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-ink-700/85">
-              We&apos;re a tree and lawn crew that takes the work seriously — because it
-              happens close to homes, families, and the things people care about. Every job
-              starts with a clear estimate and ends with a property that&apos;s clean, safe,
-              and taken care of.
+              We&apos;re a tree care crew that takes the work seriously — because it happens
+              close to homes, families, and the things people care about. Every job starts
+              with a clear estimate and ends with a property that&apos;s clean, safe, and
+              taken care of.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-ink-700/85">
-              Whether it&apos;s a single tree, a full lawn, or ongoing property maintenance,
-              residential or commercial, we bring the same attention to safety,
-              communication, and quality — and when a storm takes a tree down, we answer
-              around the clock.
+              Whether it&apos;s a single tree or a full property, residential or commercial,
+              we bring the same attention to safety, communication, and quality — in English
+              and en Español.
             </p>
 
             <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">

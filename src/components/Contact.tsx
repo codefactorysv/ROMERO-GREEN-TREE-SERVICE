@@ -21,7 +21,7 @@ export function Contact() {
             </h2>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-cream-100/75">
               Tell us what you need and we&apos;ll get back to you with a free, no-obligation
-              estimate. Prefer to talk it through? Give us a call.
+              estimate. Prefer to talk it through? Call or email us directly.
             </p>
 
             <div className="mt-8 flex flex-col gap-4">
@@ -37,28 +37,18 @@ export function Contact() {
                   <p className="font-semibold text-cream-50">{siteConfig.phoneDisplay}</p>
                 </div>
               </a>
-              <div className="flex items-center gap-3 rounded-2xl border border-cream-50/10 bg-forest-900/60 p-4">
+              <a
+                href={siteConfig.emailHref}
+                className="flex items-center gap-3 rounded-2xl border border-cream-50/10 bg-forest-900/60 p-4 transition-colors hover:border-lime-300/40"
+              >
                 <span className="flex size-11 items-center justify-center rounded-full bg-lime-400/15 text-lime-300">
-                  <Icon name="clock" className="size-5" />
+                  <Icon name="mail" className="size-5" />
                 </span>
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-cream-100/50">
-                    Regular service hours
-                  </p>
-                  <p className="font-semibold text-cream-50">{siteConfig.hours}</p>
+                  <p className="text-xs uppercase tracking-wide text-cream-100/50">Email us</p>
+                  <p className="font-semibold text-cream-50 break-all">{siteConfig.email}</p>
                 </div>
-              </div>
-              <div className="flex items-center gap-3 rounded-2xl border border-lime-300/25 bg-forest-900/60 p-4">
-                <span className="flex size-11 items-center justify-center rounded-full bg-lime-400/15 text-lime-300">
-                  <Icon name="emergency" className="size-5" />
-                </span>
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-cream-100/50">
-                    Tree emergency?
-                  </p>
-                  <p className="font-semibold text-cream-50">{siteConfig.emergency}</p>
-                </div>
-              </div>
+              </a>
             </div>
           </Reveal>
 

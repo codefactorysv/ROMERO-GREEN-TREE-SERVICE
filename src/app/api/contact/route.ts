@@ -12,10 +12,7 @@ import {
 
 export const runtime = "nodejs";
 
-// No public email is published on the site yet — the recipient comes purely
-// from the environment. CONTACT_TO_EMAIL is kept as a fallback name so an
-// existing deployment keeps working.
-const TO_EMAIL = process.env.CONTACT_EMAIL || process.env.CONTACT_TO_EMAIL || "";
+const TO_EMAIL = process.env.CONTACT_TO_EMAIL || siteConfig.email;
 const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || "onboarding@resend.dev";
 
 function escapeHtml(value: string) {
@@ -88,6 +85,7 @@ export async function POST(request: Request) {
     service: String(formData.get("service") ?? ""),
     propertyType: String(formData.get("propertyType") ?? "") || undefined,
     message: String(formData.get("message") ?? ""),
+    spanishPreferred: String(formData.get("spanishPreferred") ?? "") === "true",
     company: String(formData.get("company") ?? ""),
   };
 
@@ -138,26 +136,21 @@ export async function POST(request: Request) {
     "Service Needed": data.service,
     "Property Type": data.propertyType || "—",
     Message: data.message || "—",
+    "Prefers Spanish": data.spanishPreferred ? "Yes" : "No",
     "Photos Attached": String(photos.length),
     Submitted: new Date().toLocaleString("en-US"),
   };
 
   const apiKey = process.env.RESEND_API_KEY;
 
-  if (!apiKey || !TO_EMAIL) {
-    // Integration is complete — it only needs RESEND_API_KEY and CONTACT_EMAIL.
-    // In development we log the submission so the whole flow can be tested
-    // without credentials.
+  if (!apiKey) {
+    // Integration is complete — it only needs credentials. In development we
+    // log the submission so the whole flow can be tested without a key.
     if (process.env.NODE_ENV !== "production") {
-      console.info(
-        "[contact] RESEND_API_KEY and/or CONTACT_EMAIL missing — submission logged instead:",
-        emailFields,
-      );
+      console.info("[contact] RESEND_API_KEY missing — submission logged instead:", emailFields);
       return NextResponse.json({ message: "Thank you! We received your request." });
     }
-    console.error(
-      "[contact] RESEND_API_KEY and/or CONTACT_EMAIL is not configured — email not sent.",
-    );
+    console.error("[contact] RESEND_API_KEY is not configured — email not sent.");
     return NextResponse.json(
       {
         message: `We couldn't send your request right now. Please call us at ${siteConfig.phoneDisplay}.`,

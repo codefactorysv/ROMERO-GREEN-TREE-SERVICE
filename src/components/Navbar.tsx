@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/lib/content";
@@ -37,15 +36,13 @@ export function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-6 lg:px-8">
-        <Link href="#home" aria-label={`${siteConfig.brand} — ${siteConfig.descriptor}`}>
-          <Image
-            src={solid ? siteConfig.logoDark : siteConfig.logoLight}
-            alt={`${siteConfig.brand} ${siteConfig.descriptor} logo`}
-            width={902}
-            height={255}
-            priority
-            className="h-9 w-auto sm:h-11"
-          />
+        <Link
+          href="#home"
+          className={`font-display text-lg font-semibold tracking-tight sm:text-xl ${
+            solid ? "text-forest-900" : "text-cream-50"
+          }`}
+        >
+          Romero <span className="text-lime-500">Green Tree</span>
         </Link>
 
         <ul className="hidden items-center gap-8 lg:flex">
@@ -136,13 +133,6 @@ export function Navbar() {
             >
               Get a Free Estimate
             </Link>
-            <a
-              href={siteConfig.phoneHref}
-              onClick={() => setOpen(false)}
-              className="mt-3 block rounded-full border border-forest-800/20 px-5 py-3 text-center text-sm font-semibold text-forest-800"
-            >
-              Tree emergency? Call {siteConfig.phoneDisplay}
-            </a>
           </motion.div>
         )}
       </AnimatePresence>

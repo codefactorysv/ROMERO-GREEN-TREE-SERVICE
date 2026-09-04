@@ -1,9 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { navLinks, photoCredits, services, siteConfig } from "@/lib/content";
 import { Icon } from "@/components/Icon";
 
-const mainServices = services.filter((s) => s.size === "lg");
+const bigServices = services.filter((s) => s.size === "lg");
 
 export function Footer() {
   return (
@@ -11,17 +10,13 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Image
-              src={siteConfig.logoLight}
-              alt={`${siteConfig.brand} ${siteConfig.descriptor} logo`}
-              width={902}
-              height={255}
-              className="h-11 w-auto"
-            />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed">{siteConfig.slogan}</p>
+            <p className="font-display text-xl font-semibold text-cream-50">
+              Romero <span className="text-lime-400">Green Tree</span>
+            </p>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed">{siteConfig.slogan}</p>
             <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-lime-400/10 px-3 py-1 text-xs font-semibold text-lime-300 ring-1 ring-lime-400/20">
-              <Icon name="emergency" className="size-3.5" />
-              {siteConfig.emergency}
+              <Icon name="language" className="size-3.5" />
+              Hablamos Español
             </p>
           </div>
 
@@ -45,7 +40,7 @@ export function Footer() {
               Services
             </p>
             <ul className="mt-4 flex flex-col gap-2.5 text-sm">
-              {mainServices.map((service) => (
+              {bigServices.map((service) => (
                 <li key={service.slug}>
                   <Link href="#services" className="transition-colors hover:text-lime-300">
                     {service.title}
@@ -61,25 +56,16 @@ export function Footer() {
             </p>
             <ul className="mt-4 flex flex-col gap-3 text-sm">
               <li>
-                <a
-                  href={siteConfig.phoneHref}
-                  className="flex items-center gap-2 font-semibold text-cream-50 transition-colors hover:text-lime-300"
-                >
+                <a href={siteConfig.phoneHref} className="flex items-center gap-2 transition-colors hover:text-lime-300">
                   <Icon name="phone" className="size-4" />
-                  {siteConfig.phone}
+                  {siteConfig.phoneDisplay}
                 </a>
               </li>
-              <li className="flex items-start gap-2">
-                <Icon name="clock" className="mt-0.5 size-4 shrink-0" />
-                <span>
-                  Regular hours
-                  <br />
-                  {siteConfig.hours}
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Icon name="emergency" className="mt-0.5 size-4 shrink-0" />
-                <span>{siteConfig.emergency}</span>
+              <li>
+                <a href={siteConfig.emailHref} className="flex items-center gap-2 break-all transition-colors hover:text-lime-300">
+                  <Icon name="mail" className="size-4 shrink-0" />
+                  {siteConfig.email}
+                </a>
               </li>
             </ul>
             <Link
@@ -95,7 +81,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
-          <p>Residential &amp; Commercial · Free Estimates · 24/7 Emergency Tree Service</p>
+          <p>Licensed &amp; Insured · Residential &amp; Commercial · Free Estimates</p>
         </div>
 
         <p className="mt-4 text-[11px] leading-relaxed text-cream-100/25">

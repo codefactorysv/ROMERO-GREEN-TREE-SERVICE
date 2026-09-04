@@ -10,7 +10,7 @@ import { Lightbox } from "@/components/Lightbox";
 const categories: Array<GalleryCategory | "All"> = [
   "All",
   "Tree Removal",
-  "Tree Work",
+  "Tree Trimming & Pruning",
   "Special Projects",
 ];
 

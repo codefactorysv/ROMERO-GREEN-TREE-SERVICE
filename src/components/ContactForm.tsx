@@ -21,6 +21,7 @@ const initialValues = {
   service: "" as string,
   propertyType: "" as string,
   message: "",
+  spanishPreferred: false,
   company: "", // honeypot
 };
 
@@ -325,6 +326,17 @@ export function ContactForm() {
           </ul>
         )}
       </div>
+
+      <label className="mt-6 flex items-start gap-3 text-sm text-cream-100/85">
+        <input
+          type="checkbox"
+          name="spanishPreferred"
+          checked={values.spanishPreferred}
+          onChange={(e) => updateField("spanishPreferred", e.target.checked)}
+          className="mt-0.5 size-4 rounded border-cream-50/30 bg-transparent text-lime-400 focus:ring-lime-400"
+        />
+        I prefer service in Spanish / Prefiero el servicio en Español.
+      </label>
 
       {status === "error" && serverMessage && (
         <div
