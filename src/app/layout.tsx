@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import { siteConfig } from "@/lib/content";
-import { jsonLdHtml, organizationId } from "@/lib/seo";
+import { jsonLdHtml, localBusinessSchema, organizationId } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -86,8 +86,11 @@ const structuredData = {
   image: `${siteConfig.url}${siteConfig.ogImage}`,
   logo: `${siteConfig.url}${siteConfig.logoDark}`,
   priceRange: "$$",
-  // Service area / address intentionally omitted — not confirmed by the
-  // client. Add a `address` (PostalAddress) and `areaServed` once known.
+  // Address, service area, geo point and opening hours all come from
+  // `businessLocation` in src/lib/content.ts, which is empty and switched off
+  // until the client confirms them — so this spread adds nothing today. See
+  // "Turning on local SEO" in the README.
+  ...localBusinessSchema(),
   knowsLanguage: ["en", "es"],
   makesOffer: [
     "Tree Removal",
