@@ -3,14 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
-import { navLinks, siteConfig } from "@/lib/content";
+import { navLinks, resolveNavHref, siteConfig } from "@/lib/content";
 import { Icon } from "@/components/Icon";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  // Only the landing page puts a dark hero behind a transparent header. Every
+  // other route (the blog) needs the solid treatment from the first pixel, or
+  // the cream-on-cream nav becomes invisible.
+  const onHome = pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -26,7 +32,7 @@ export function Navbar() {
     };
   }, [open]);
 
-  const solid = scrolled || open;
+  const solid = scrolled || open || !onHome;
 
   return (
     <header
@@ -37,7 +43,7 @@ export function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-6 lg:px-8">
-        <Link href="#home" aria-label={`${siteConfig.name} — home`}>
+        <Link href={onHome ? "#home" : "/"} aria-label={`${siteConfig.name} — home`}>
           <Image
             src={solid ? siteConfig.logoDark : siteConfig.logoLight}
             alt={`${siteConfig.name} logo`}
@@ -52,7 +58,7 @@ export function Navbar() {
           {navLinks.map((link) => (
             <li key={link.href}>
               <Link
-                href={link.href}
+                href={resolveNavHref(link.href, onHome)}
                 className={`text-sm font-medium tracking-wide transition-colors ${
                   solid
                     ? "text-ink-800 hover:text-forest-600"
@@ -76,7 +82,7 @@ export function Navbar() {
             {siteConfig.phoneDisplay}
           </a>
           <Link
-            href="#contact"
+            href={resolveNavHref("#contact", onHome)}
             className="rounded-full bg-lime-400 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-ink-900 shadow-md shadow-lime-900/10 transition-all hover:-translate-y-0.5 hover:bg-lime-300 hover:shadow-lg"
           >
             Free Estimate
@@ -120,7 +126,7 @@ export function Navbar() {
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={resolveNavHref(link.href, onHome)}
                     onClick={() => setOpen(false)}
                     className="block rounded-lg px-3 py-3 text-base font-medium text-ink-800 hover:bg-forest-50 hover:text-forest-700"
                   >
@@ -130,7 +136,7 @@ export function Navbar() {
               ))}
             </ul>
             <Link
-              href="#contact"
+              href={resolveNavHref("#contact", onHome)}
               onClick={() => setOpen(false)}
               className="mt-4 block rounded-full bg-lime-400 px-5 py-3.5 text-center text-sm font-bold uppercase tracking-wide text-ink-900 shadow-md"
             >

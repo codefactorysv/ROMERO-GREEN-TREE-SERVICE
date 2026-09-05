@@ -7,6 +7,7 @@ import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { Gallery } from "@/components/Gallery";
 import { FeaturedBanner } from "@/components/FeaturedBanner";
 import { About } from "@/components/About";
+import { LatestPosts } from "@/components/LatestPosts";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { MobileCTA } from "@/components/MobileCTA";
@@ -24,6 +25,7 @@ export default function Home() {
         <Gallery />
         <FeaturedBanner />
         <About />
+        <LatestPosts />
         <Contact />
       </main>
       <Footer />

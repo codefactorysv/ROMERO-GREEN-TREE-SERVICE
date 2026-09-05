@@ -1,11 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
-import { navLinks, photoCredits, services, siteConfig } from "@/lib/content";
+import {
+  navLinks,
+  photoCredits,
+  resolveNavHref,
+  services,
+  siteConfig,
+} from "@/lib/content";
 import { Icon } from "@/components/Icon";
 
 const bigServices = services.filter((s) => s.size === "lg");
 
-export function Footer() {
+/**
+ * `onHome` is false on the blog routes, where the landing-page anchors have to
+ * be prefixed with "/" to work. Server component, so the route can't be read
+ * from a hook — the caller passes it.
+ */
+export function Footer({ onHome = true }: { onHome?: boolean }) {
   return (
     <footer className="bg-ink-900 pb-28 pt-16 text-cream-100/70 sm:pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -41,7 +52,10 @@ export function Footer() {
             <ul className="mt-4 flex flex-col gap-2.5 text-sm">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="transition-colors hover:text-lime-300">
+                  <Link
+                    href={resolveNavHref(link.href, onHome)}
+                    className="transition-colors hover:text-lime-300"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -56,7 +70,10 @@ export function Footer() {
             <ul className="mt-4 flex flex-col gap-2.5 text-sm">
               {bigServices.map((service) => (
                 <li key={service.slug}>
-                  <Link href="#services" className="transition-colors hover:text-lime-300">
+                  <Link
+                    href={resolveNavHref("#services", onHome)}
+                    className="transition-colors hover:text-lime-300"
+                  >
                     {service.title}
                   </Link>
                 </li>
@@ -83,7 +100,7 @@ export function Footer() {
               </li>
             </ul>
             <Link
-              href="#contact"
+              href={resolveNavHref("#contact", onHome)}
               className="mt-5 inline-flex items-center justify-center rounded-full bg-lime-400 px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-ink-900 transition-transform hover:-translate-y-0.5"
             >
               Free Estimate
