@@ -33,7 +33,11 @@ export function Services() {
               className={service.slug === "tree-removal" ? "lg:col-span-2" : undefined}
             >
               <article
-                className={`group relative isolate flex h-full flex-col justify-end overflow-hidden rounded-3xl ${
+                // Per-service anchor target, so the blog can deep-link to a
+                // specific service ("/#stump-grinding") instead of dropping the
+                // reader at the top of the section. scroll-mt clears the header.
+                id={service.slug}
+                className={`group relative isolate flex h-full scroll-mt-24 flex-col justify-end overflow-hidden rounded-3xl ${
                   service.image ? "min-h-[24rem]" : "min-h-64 bg-forest-900"
                 }`}
               >
