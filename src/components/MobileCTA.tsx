@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { siteConfig } from "@/lib/content";
+import { usePathname } from "next/navigation";
+import { resolveNavHref, siteConfig } from "@/lib/content";
 import { Icon } from "@/components/Icon";
 
 export function MobileCTA() {
   const [visible, setVisible] = useState(false);
+  const onHome = usePathname() === "/";
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 480);
@@ -29,7 +31,7 @@ export function MobileCTA() {
         Call Now
       </a>
       <a
-        href="#contact"
+        href={resolveNavHref("#contact", onHome)}
         className="flex items-center justify-center gap-2 bg-lime-400 py-4 text-sm font-bold uppercase tracking-wide text-ink-900 active:bg-lime-300"
       >
         <Icon name="estimate" className="size-4" />

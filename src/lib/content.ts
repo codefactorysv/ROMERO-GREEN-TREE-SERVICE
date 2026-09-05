@@ -23,9 +23,33 @@ export const navLinks = [
   { label: "Home", href: "#home" },
   { label: "Services", href: "#services" },
   { label: "Our Work", href: "#our-work" },
+  { label: "Blog", href: "/blog" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ] as const;
+
+/**
+ * Nav hrefs are landing-page anchors ("#services"), which only resolve on "/".
+ * Anywhere else (the blog) they need a leading slash so the browser goes home
+ * first and then jumps to the section. Real paths like "/blog" pass through.
+ */
+export function resolveNavHref(href: string, onHome: boolean): string {
+  return href.startsWith("#") && !onHome ? `/${href}` : href;
+}
+
+/**
+ * Copy for the blog index. The articles themselves are MDX files in
+ * src/content/blog/ — see src/lib/blog.ts.
+ */
+export const blogConfig = {
+  eyebrow: "Tree Care Advice",
+  heading: "Guides for Keeping Your Trees Safe",
+  intro:
+    "Practical guidance on caring for the trees around your home — what to watch for, when to act, and what to do when something goes wrong.",
+  metaTitle: "Tree Care Blog",
+  metaDescription:
+    "Tree care guides from Romero Green Tree Service: storm season prep, what to do when a tree falls, and how to prune for healthy, safe trees.",
+} as const;
 
 export type ServiceItem = {
   slug: string;

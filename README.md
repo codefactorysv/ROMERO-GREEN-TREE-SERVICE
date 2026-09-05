@@ -18,6 +18,7 @@ Phone: **832-272-4373** · Email: **greentreeromero@gmail.com** · Hablamos Espa
 | Styling    | Tailwind CSS v4 (CSS-first theme tokens)       |
 | Animation  | Motion (`motion/react`)                        |
 | Icons      | lucide-react                                   |
+| Blog       | MDX files rendered with `next-mdx-remote/rsc`  |
 | Validation | Zod (shared client + server schema)            |
 | Email      | Resend                                         |
 
@@ -107,12 +108,18 @@ src/
     layout.tsx           # fonts, SEO metadata, Open Graph, JSON-LD
     page.tsx             # section composition of the landing page
     globals.css          # Tailwind v4 theme tokens (brand colors, fonts, motion)
-    sitemap.ts           # /sitemap.xml
+    sitemap.ts           # /sitemap.xml (landing page + every blog URL)
     robots.ts            # /robots.txt
+    blog/page.tsx        # /blog — article index with tag filter
+    blog/[slug]/page.tsx # /blog/<slug> — the article template
     api/contact/route.ts # form endpoint (validation, anti-spam, Resend)
   components/            # one file per section + shared Icon/Reveal/Lightbox
+  content/
+    blog/*.mdx           # the articles themselves — one file per post
   lib/
     content.ts           # ALL site copy, services, gallery data, contact info
+    blog.ts              # reads + validates the MDX files, sorts, tags
+    seo.ts               # JSON-LD helpers shared by the layout and the blog
     validation.ts        # shared Zod schema and upload limits
     rate-limit.ts        # in-memory per-IP limiter
 public/
@@ -127,6 +134,83 @@ public/
 Almost everything visitors read lives in **`src/lib/content.ts`** — phone number,
 email, services, gallery captions and categories, trust points. Change it there and it
 updates everywhere on the page.
+
+---
+
+## The blog
+
+Articles live at `/blog` (index, with a tag filter) and `/blog/<slug>`. Same
+philosophy as the rest of the site: **edit a file, no CMS**.
+
+### Adding a post
+
+1. Create `src/content/blog/<slug>.mdx`. The filename must match the `slug` in the
+   frontmatter — the loader throws at build time if they drift apart.
+2. Fill in the frontmatter:
+
+   ```yaml
+   ---
+   title: "Tree Pruning Done Right: A Texas Homeowner's Guide"
+   slug: tree-pruning-guide-healthy-trees
+   description: "The 140-160 character meta description used for search and social."
+   date: 2026-09-02
+   author: Romero Green Tree Service
+   cover: /images/real/hero-climber-pine.jpg
+   coverAlt: "Climber roped into a pine canopy making a pruning cut on a limb"
+   coverPosition: object-[55%_50%]
+   tags: ["Tree Pruning", "Tree Health"]
+   draft: false
+   ---
+   ```
+
+   | Field           | Required | Notes                                                             |
+   | --------------- | -------- | ----------------------------------------------------------------- |
+   | `title`         | Yes      | The page `h1`. Keep it under ~65 characters so search doesn't cut it. |
+   | `slug`          | Yes      | Must equal the filename without the extension.                     |
+   | `description`   | Yes      | Meta description, OG/Twitter description, and card copy.           |
+   | `date`          | Yes      | `YYYY-MM-DD`, or a full ISO 8601 timestamp with an offset.         |
+   | `author`        | Yes      | Shown as the byline and used as the schema author.                 |
+   | `cover`         | Yes      | Path under `public/`. The build fails if the file is missing.      |
+   | `coverAlt`      | Yes      | Descriptive alt text — not the title again.                        |
+   | `coverPosition` | No       | Tailwind object-position, e.g. `object-[50%_38%]`. Most crew photos are portrait, so a 16:10 crop usually needs steering. |
+   | `tags`          | No       | Drives the filter on `/blog` and the schema keywords.              |
+   | `draft`         | No       | `true` hides the post in production but keeps it visible in `npm run dev`. |
+   | `updated`       | No       | Last-edited date. Feeds `dateModified` and the sitemap; defaults to `date`. |
+
+3. Write the body in Markdown. Headings start at `##` (the `h1` is the title), and
+   GitHub-flavored tables work. One custom component is available:
+
+   ```mdx
+   <Callout type="emergency">Storm damage? Call 24/7.</Callout>
+   <Callout type="warning">Topped trees are higher risk, not lower.</Callout>
+   <Callout type="tip">Prune most shade trees in winter dormancy.</Callout>
+   ```
+
+Everything else is automatic: the post appears on `/blog`, in the "From Our Blog"
+block on the landing page, in `sitemap.xml`, and with its own canonical URL, Open
+Graph tags, `BlogPosting` and `BreadcrumbList` JSON-LD.
+
+### How it renders
+
+`src/lib/blog.ts` reads and validates the files at build time; `next-mdx-remote/rsc`
+compiles the body inside a Server Component, so every article is prerendered as
+static HTML. Prose styling comes from `src/components/mdx.tsx`, which maps each
+markdown element onto the theme tokens in `globals.css` — deliberately hand-rolled
+instead of a typography plugin, which would ship its own type scale and greys and
+read as a different brand.
+
+Unknown slugs 404 for real: `generateStaticParams` enumerates the files and
+`dynamicParams = false` makes the router reject anything else.
+
+### Writing rules
+
+Articles are marketing copy for a real business, so the **Pending business info**
+list below applies to them too. Do not write a service area or city, years in
+business, crew size, licenses, certifications, reviews, prices, guarantees, or
+regular business hours. The confirmed facts are: the phone number, the email,
+insured, free estimates, 24/7 emergency service, residential and commercial, the
+listed services, and English/Español. General horticultural and weather facts are
+fine — just never attribute them to the company as a statistic.
 
 ---
 
