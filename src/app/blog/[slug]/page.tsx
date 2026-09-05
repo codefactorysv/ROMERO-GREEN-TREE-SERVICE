@@ -13,6 +13,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { MobileCTA } from "@/components/MobileCTA";
 import { BlogCard } from "@/components/BlogCard";
+import { FaqSection } from "@/components/FaqSection";
 import { Reveal } from "@/components/Reveal";
 import { Icon } from "@/components/Icon";
 
@@ -111,7 +112,61 @@ export default async function BlogPostPage({ params }: Params) {
     isPartOf: { "@id": `${siteConfig.url}/blog#blog` },
     keywords: post.tags,
     inLanguage: "en-US",
+    // Points voice assistants at the headline and the standfirst, which are
+    // written to stand alone when read aloud.
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".article-headline", ".article-summary"],
+    },
   };
+
+  /**
+   * FAQPage built from the article's own visible FAQ block. Google restricts the
+   * FAQ *rich result* to a handful of site types these days, but the markup is
+   * still what lets answer engines and assistants lift a clean question/answer
+   * pair instead of guessing at the prose.
+   */
+  const faqSchema =
+    post.faq.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "@id": `${url}#faq`,
+          isPartOf: { "@id": `${url}#article` },
+          inLanguage: "en-US",
+          mainEntity: post.faq.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: { "@type": "Answer", text: item.answer },
+          })),
+        }
+      : null;
+
+  /**
+   * HowTo mirroring the numbered procedure printed in the article. The steps are
+   * parsed out of that visible list, so the markup describes exactly what is on
+   * the page — a HowTo that does not match its page is a policy violation, not
+   * an optimisation.
+   */
+  const howToSchema =
+    post.howTo.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "HowTo",
+          "@id": `${url}#howto`,
+          name: post.title,
+          description: post.description,
+          image: `${siteConfig.url}${post.cover}`,
+          inLanguage: "en-US",
+          isPartOf: { "@id": `${url}#article` },
+          step: post.howTo.map((item, i) => ({
+            "@type": "HowToStep",
+            position: i + 1,
+            name: item.name,
+            text: item.text,
+          })),
+        }
+      : null;
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -170,12 +225,13 @@ export default async function BlogPostPage({ params }: Params) {
               </ul>
             )}
 
-            <h1 className="mt-5 text-balance font-display text-3xl font-semibold text-ink-900 sm:text-4xl lg:text-5xl">
+            {/* article-headline / article-summary are the speakable targets. */}
+            <h1 className="article-headline mt-5 text-balance font-display text-3xl font-semibold text-ink-900 sm:text-4xl lg:text-5xl">
               {post.title}
             </h1>
 
-            <p className="mt-5 text-lg leading-relaxed text-ink-700/85">
-              {post.description}
+            <p className="article-summary mt-5 text-lg leading-relaxed text-ink-700/85">
+              {post.summary ?? post.description}
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-forest-900/10 pt-5 text-sm text-ink-700/60">
@@ -212,6 +268,8 @@ export default async function BlogPostPage({ params }: Params) {
               options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
             />
           </div>
+
+          <FaqSection items={post.faq} />
 
           <aside className="mt-14 overflow-hidden rounded-3xl bg-forest-950 px-6 py-10 sm:px-10">
             <p className="inline-flex items-center gap-2 rounded-full bg-lime-400/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-lime-300 ring-1 ring-lime-300/30">
@@ -273,6 +331,18 @@ export default async function BlogPostPage({ params }: Params) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdHtml(breadcrumbSchema) }}
       />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqSchema) }}
+        />
+      )}
+      {howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(howToSchema) }}
+        />
+      )}
     </>
   );
 }

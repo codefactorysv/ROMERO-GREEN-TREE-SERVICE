@@ -13,10 +13,33 @@ const PUBLIC_DIR = path.join(process.cwd(), "public");
 /** Average adult reading speed, used for the "x min read" badge. */
 const WORDS_PER_MINUTE = 200;
 
+/**
+ * Heading that marks the FAQ block at the end of an article. The loader lifts
+ * that section out of the body so the page can render it with its own design,
+ * and reuses the very same text for the FAQPage JSON-LD — one source, so the
+ * markup can never drift from what the reader sees.
+ */
+const FAQ_HEADING = "## Frequently Asked Questions";
+
+export type FaqItem = {
+  question: string;
+  /** Flattened to plain text for the JSON-LD acceptedAnswer. */
+  answer: string;
+  /** The original markdown, so the rendered answer keeps its links and bold. */
+  answerMarkdown: string;
+};
+export type HowToStep = { name: string; text: string };
+
 export type PostFrontmatter = {
   title: string;
   slug: string;
   description: string;
+  /**
+   * One self-contained sentence that answers the article's core question, shown
+   * under the headline and pointed at by the `speakable` markup. Written to make
+   * sense read aloud with no surrounding context. Falls back to `description`.
+   */
+  summary?: string;
   /** `YYYY-MM-DD`, or a full ISO 8601 timestamp with an offset. */
   date: string;
   author: string;
@@ -30,6 +53,14 @@ export type PostFrontmatter = {
    */
   coverPosition?: string;
   tags: string[];
+  /**
+   * Title of the `##` section whose numbered list is a step-by-step procedure,
+   * e.g. "The First Hour, In Order". Setting it emits HowTo structured data
+   * built from those exact visible steps. Omit it on articles that are not
+   * procedures — HowTo markup that does not match the page is a policy problem,
+   * not a bonus.
+   */
+  howToSection?: string;
   /** Draft posts are visible in development and hidden in production. */
   draft: boolean;
   /** Optional last-edited date; falls back to `date`. */
@@ -47,9 +78,99 @@ export type PostMeta = PostFrontmatter & {
 };
 
 export type Post = PostMeta & {
-  /** Raw MDX body, frontmatter already stripped. */
+  /** MDX body, with the frontmatter and the FAQ section already lifted out. */
   content: string;
+  /** Q&A pairs lifted from the article's FAQ section; empty when it has none. */
+  faq: FaqItem[];
+  /** Steps lifted from the `howToSection` list; empty when unset. */
+  howTo: HowToStep[];
 };
+
+/** Flatten inline markdown so a string is safe to put in a JSON-LD value. */
+function toPlainText(markdown: string): string {
+  return markdown
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Split the FAQ section off the end of an article.
+ *
+ * Returns the questions plus the body without them, so the article page can
+ * render the prose and the FAQ with different treatments while both come from
+ * the one file the author edits.
+ */
+function extractFaq(content: string): { faq: FaqItem[]; body: string } {
+  const start = content.indexOf(FAQ_HEADING);
+  if (start === -1) return { faq: [], body: content };
+
+  const body = `${content.slice(0, start).trimEnd()}\n`;
+  const section = content.slice(start + FAQ_HEADING.length);
+
+  const faq = section
+    .split(/\r?\n### /)
+    .slice(1)
+    .map((block) => {
+      // A following "## " heading ends the FAQ block.
+      const [questionLine, ...answerLines] = block.split(/\r?\n/);
+      const answer = answerLines.join("\n").split(/\r?\n## /)[0];
+      return {
+        question: toPlainText(questionLine),
+        answer: toPlainText(answer),
+        answerMarkdown: answer.trim(),
+      };
+    })
+    .filter((item) => item.question && item.answer);
+
+  return { faq, body };
+}
+
+/**
+ * Read a numbered "1. **Name.** Explanation" list out of the named section and
+ * turn it into HowTo steps. Parsing the rendered prose rather than a parallel
+ * data block is deliberate: the structured data is guaranteed to describe the
+ * steps the reader actually sees.
+ */
+function extractHowTo(content: string, sectionTitle: string | undefined, file: string): HowToStep[] {
+  if (!sectionTitle) return [];
+
+  const heading = `## ${sectionTitle}`;
+  const start = content.indexOf(heading);
+  if (start === -1) {
+    throw new Error(
+      `Blog post ${file} sets howToSection "${sectionTitle}" but has no "${heading}" section.`,
+    );
+  }
+
+  const section = content.slice(start + heading.length).split(/\r?\n## /)[0];
+
+  const steps = section
+    .split(/\r?\n/)
+    .map((line) => /^\d+\.\s+(.*)$/.exec(line.trim())?.[1])
+    .filter((line): line is string => Boolean(line))
+    .map((line) => {
+      const lead = /^\*\*(.+?)\*\*\s*(.*)$/.exec(line);
+      if (!lead) {
+        const text = toPlainText(line);
+        return { name: text.slice(0, 70), text };
+      }
+      const name = toPlainText(lead[1]).replace(/[.:]$/, "");
+      const text = toPlainText(lead[2]);
+      return { name, text: text || name };
+    });
+
+  if (steps.length === 0) {
+    throw new Error(
+      `Blog post ${file} sets howToSection "${sectionTitle}" but that section has no numbered steps.`,
+    );
+  }
+
+  return steps;
+}
 
 const REQUIRED_KEYS = [
   "title",
@@ -155,7 +276,12 @@ function formatDateLabel(date: string): string {
  * page can pass posts to client components without shipping every article body
  * to the browser.
  */
-type LoadedPost = { meta: PostMeta; content: string };
+type LoadedPost = {
+  meta: PostMeta;
+  content: string;
+  faq: FaqItem[];
+  howTo: HowToStep[];
+};
 
 function toPost(file: string): LoadedPost {
   const raw = fs.readFileSync(path.join(POSTS_DIR, file), "utf8");
@@ -184,12 +310,20 @@ function toPost(file: string): LoadedPost {
 
   const date = data.date as string;
   const updated = typeof data.updated === "string" ? data.updated : undefined;
+  const howToSection =
+    typeof data.howToSection === "string" ? data.howToSection : undefined;
+
+  // Reading time is measured on the whole file, FAQ included, because the
+  // reader sees the FAQ too even though it renders separately.
+  const { faq, body } = extractFaq(content);
+  const howTo = extractHowTo(content, howToSection, file);
 
   return {
     meta: {
       title: data.title as string,
       slug,
       description: data.description as string,
+      summary: typeof data.summary === "string" ? data.summary : undefined,
       date,
       author: data.author as string,
       cover,
@@ -197,6 +331,7 @@ function toPost(file: string): LoadedPost {
       coverPosition:
         typeof data.coverPosition === "string" ? data.coverPosition : undefined,
       tags: Array.isArray(data.tags) ? data.tags : [],
+      howToSection,
       draft: data.draft === true,
       updated,
       dateLabel: formatDateLabel(date),
@@ -204,7 +339,9 @@ function toPost(file: string): LoadedPost {
       updatedISO: updated ?? date,
       readingMinutes: readingMinutes(content),
     },
-    content,
+    content: body,
+    faq,
+    howTo,
   };
 }
 
@@ -232,7 +369,13 @@ export function getLatestPosts(count: number): PostMeta[] {
 /** A single post with its body, or null when the slug does not exist. */
 export function getPostBySlug(slug: string): Post | null {
   const found = readPosts().find(({ meta }) => meta.slug === slug);
-  return found ? { ...found.meta, content: found.content } : null;
+  if (!found) return null;
+  return {
+    ...found.meta,
+    content: found.content,
+    faq: found.faq,
+    howTo: found.howTo,
+  };
 }
 
 /** Every tag in use, most-used first, then alphabetically. */

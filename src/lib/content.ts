@@ -38,6 +38,65 @@ export function resolveNavHref(href: string, onHome: boolean): string {
 }
 
 /**
+ * Local SEO data — deliberately EMPTY and switched off.
+ *
+ * A street address, a service area and regular business hours are all on the
+ * README's "Pending business info" list, so none of them are published and none
+ * of them are guessed (the 832 area code is not evidence of a city). The shape
+ * lives here so that switching local SEO on later is a data edit in one place
+ * rather than a schema rewrite.
+ *
+ * TO ACTIVATE: fill in only the fields the client actually confirms, then set
+ * `enabled: true`. Empty fields stay out of the output — see
+ * `localBusinessSchema()` in src/lib/seo.ts — so a partial address is fine.
+ */
+export type BusinessLocation = {
+  /** Leave false until the fields below hold real, client-confirmed data. */
+  enabled: boolean;
+  streetAddress: string;
+  /** City, e.g. "Houston". */
+  addressLocality: string;
+  /** Two-letter state code. */
+  addressRegion: string;
+  postalCode: string;
+  /** ISO country code. */
+  addressCountry: string;
+  latitude: number | null;
+  longitude: number | null;
+  /** Cities and counties served, e.g. ["Houston", "Harris County"]. */
+  areaServed: string[];
+  /**
+   * Radius in kilometres around the lat/long, for a service-area business with
+   * no public storefront. Emitted as a GeoCircle when there is no areaServed
+   * list to be more specific with.
+   */
+  serviceRadiusKm: number | null;
+  /**
+   * Regular office hours in schema.org syntax, e.g. ["Mo-Fr 08:00-17:00"].
+   *
+   * The 24/7 emergency line is NOT these hours. Writing "Mo-Su 00:00-23:59"
+   * here would tell search engines the business is staffed around the clock,
+   * which is not a confirmed fact — the confirmed fact is 24/7 *emergency*
+   * availability, which the site already states in prose.
+   */
+  openingHours: string[];
+};
+
+export const businessLocation: BusinessLocation = {
+  enabled: false,
+  streetAddress: "",
+  addressLocality: "",
+  addressRegion: "",
+  postalCode: "",
+  addressCountry: "US",
+  latitude: null,
+  longitude: null,
+  areaServed: [],
+  serviceRadiusKm: null,
+  openingHours: [],
+};
+
+/**
  * Copy for the blog index. The articles themselves are MDX files in
  * src/content/blog/ — see src/lib/blog.ts.
  */
