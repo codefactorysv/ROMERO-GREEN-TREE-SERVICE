@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Fraunces } from "next/font/google";
-import Script from "next/script";
 import { siteConfig } from "@/lib/content";
+import { jsonLdHtml, organizationId } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -74,6 +74,9 @@ export const metadata: Metadata = {
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
+  // Stable identity so the blog's author/publisher references resolve to this
+  // same node instead of describing a second, unrelated business.
+  "@id": organizationId,
   name: siteConfig.name,
   description:
     "Professional tree removal, trimming, pruning, stump grinding, and landscaping services for residential and commercial properties. Emergency tree service available 24/7.",
@@ -109,11 +112,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-cream-100 text-ink-900">
         {children}
-        <Script
-          id="local-business-schema"
+        <script
           type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(structuredData) }}
         />
       </body>
     </html>
